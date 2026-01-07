@@ -6,9 +6,16 @@ const config: Config = {
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
+        brand: {
+          500: '#266df8', // Azul brillante
+          600: '#0049F3', // Azul principal (Royal Blue)
+          700: '#003BBF', // Azul oscuro para degradados
+          900: '#081338', // Azul muy oscuro para el card UI
+        },
         primary: {
           50: '#eff6ff',
           100: '#dbeafe',
@@ -21,6 +28,19 @@ const config: Config = {
           800: '#1e40af',
           900: '#1e3a8a',
         },
+      },
+      animation: {
+        'pulse': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'float': 'float 3s ease-in-out infinite',
+      },
+      keyframes: {
+        float: {
+          '0%, 100%': { transform: 'translateY(0px)' },
+          '50%': { transform: 'translateY(-20px)' },
+        },
+      },
+      backdropBlur: {
+        xs: '2px',
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
