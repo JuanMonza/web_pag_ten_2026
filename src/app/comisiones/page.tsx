@@ -62,7 +62,7 @@ export default async function ComisionesPage() {
     <div>
       <h1 className="text-3xl font-bold text-gray-900 mb-8">Comisiones</h1>
       
-      <Card className="mb-6 bg-gradient-to-r from-green-500 to-green-600 text-white">
+      <Card className="mb-6 bg-linear-to-r from-green-500 to-green-600 text-white">
         <CardContent className="p-6">
           <p className="text-lg opacity-90">Total Comisiones Acumuladas</p>
           <p className="text-4xl font-bold mt-2">{formatCurrency(totalComisiones)}</p>

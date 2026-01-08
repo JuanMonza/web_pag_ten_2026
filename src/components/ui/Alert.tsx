@@ -27,10 +27,10 @@ export function Alert({ type, message, onClose }: AlertProps) {
   
   return (
     <div className={cn('flex items-center p-4 border rounded-lg', styles[type])}>
-      <Icon className="mr-3 flex-shrink-0" size={20} />
+      <Icon className="mr-3 shrink-0" size={20} />
       <p className="flex-1">{message}</p>
       {onClose && (
-        <button onClick={onClose} className="ml-3 flex-shrink-0">
+        <button onClick={onClose} className="ml-3 shrink-0">
           <XCircle size={20} />
         </button>
       )}

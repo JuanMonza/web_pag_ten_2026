@@ -44,7 +44,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center relative overflow-hidden p-4">
       {/* Fondo con degradado Royal Blue */}
-      <div className="absolute inset-0 bg-gradient-to-br from-brand-600 via-brand-700 to-brand-900">
+      <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom right, #0049F3, #003BBF, #081338)' }}>
         {/* Patrón de cuadrícula sutil */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute inset-0" style={{
@@ -55,19 +55,22 @@ export default function LoginPage() {
       </div>
 
       {/* Efectos de luz brillantes */}
-      <div className="absolute top-20 left-20 w-96 h-96 bg-brand-500/20 rounded-full blur-3xl animate-pulse"></div>
-      <div className="absolute bottom-20 right-20 w-96 h-96 bg-brand-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+      <div className="absolute top-20 left-20 w-96 h-96 rounded-full blur-3xl animate-pulse" style={{ background: 'rgba(38, 109, 248, 0.2)' }}></div>
+      <div className="absolute bottom-20 right-20 w-96 h-96 rounded-full blur-3xl animate-pulse" style={{ background: 'rgba(38, 109, 248, 0.2)', animationDelay: '1s' }}></div>
 
       {/* Card principal con glassmorphism */}
       <div className="relative w-full max-w-md z-10">
         {/* Glow effect detrás del card */}
-        <div className="absolute inset-0 bg-brand-500/30 rounded-3xl blur-2xl scale-95"></div>
+        <div className="absolute inset-0 rounded-3xl blur-2xl scale-95" style={{ background: 'rgba(38, 109, 248, 0.3)' }}></div>
         
         {/* Card glassmorphism */}
-        <div className="relative backdrop-blur-xl bg-brand-900/40 border border-white/20 rounded-3xl shadow-2xl p-8">
+        <div className="relative backdrop-blur-xl border border-white/20 rounded-3xl shadow-2xl p-8" style={{ background: 'rgba(8, 19, 56, 0.4)' }}>
           {/* Header con icono */}
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-brand-500 to-brand-600 rounded-2xl mb-6 shadow-lg shadow-brand-500/50 animate-float">
+            <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl mb-6 shadow-lg animate-float" style={{ 
+              background: 'linear-gradient(to bottom right, #266df8, #0049F3)',
+              boxShadow: '0 10px 40px rgba(38, 109, 248, 0.5)'
+            }}>
               <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
               </svg>
@@ -98,7 +101,10 @@ export default function LoginPage() {
                 <input
                   type="email"
                   {...register('email')}
-                  className="w-full pl-12 pr-4 py-4 bg-white/10 border border-white/20 rounded-2xl text-white placeholder-blue-300/60 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent backdrop-blur-sm transition-all duration-300 hover:bg-white/15"
+                  className="w-full pl-12 pr-4 py-4 bg-white/10 border border-white/20 rounded-2xl text-white placeholder-blue-300/60 focus:outline-none focus:border-transparent backdrop-blur-sm transition-all duration-300 hover:bg-white/15"
+                  style={{ boxShadow: '0 0 0 2px transparent' }}
+                  onFocus={(e) => e.target.style.boxShadow = '0 0 0 2px #266df8'}
+                  onBlur={(e) => e.target.style.boxShadow = '0 0 0 2px transparent'}
                   placeholder="tu@email.com"
                 />
               </div>
@@ -121,7 +127,10 @@ export default function LoginPage() {
                 <input
                   type="password"
                   {...register('password')}
-                  className="w-full pl-12 pr-4 py-4 bg-white/10 border border-white/20 rounded-2xl text-white placeholder-blue-300/60 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent backdrop-blur-sm transition-all duration-300 hover:bg-white/15"
+                  className="w-full pl-12 pr-4 py-4 bg-white/10 border border-white/20 rounded-2xl text-white placeholder-blue-300/60 focus:outline-none focus:border-transparent backdrop-blur-sm transition-all duration-300 hover:bg-white/15"
+                  style={{ boxShadow: '0 0 0 2px transparent' }}
+                  onFocus={(e) => e.target.style.boxShadow = '0 0 0 2px #266df8'}
+                  onBlur={(e) => e.target.style.boxShadow = '0 0 0 2px transparent'}
                   placeholder="••••••••"
                 />
               </div>
@@ -133,7 +142,7 @@ export default function LoginPage() {
             {/* Recordarme y Olvidaste */}
             <div className="flex items-center justify-between pt-2">
               <label className="flex items-center cursor-pointer group">
-                <input type="checkbox" className="w-4 h-4 rounded border-white/30 bg-white/10 text-brand-500 focus:ring-brand-500 focus:ring-offset-0 cursor-pointer" />
+                <input type="checkbox" className="w-4 h-4 rounded border-white/30 bg-white/10 cursor-pointer" style={{ accentColor: '#266df8' }} />
                 <span className="ml-2 text-sm text-blue-200 group-hover:text-white transition-colors">Recordarme</span>
               </label>
               <Link
@@ -148,7 +157,23 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-4 px-6 bg-gradient-to-r from-brand-500 to-brand-600 hover:from-brand-600 hover:to-brand-700 text-white font-bold rounded-2xl shadow-lg shadow-brand-500/50 hover:shadow-xl hover:shadow-brand-500/60 transform hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none"
+              className="w-full py-4 px-6 text-white font-bold rounded-2xl shadow-lg transform hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none"
+              style={{
+                background: 'linear-gradient(to right, #266df8, #0049F3)',
+                boxShadow: '0 10px 40px rgba(38, 109, 248, 0.5)'
+              }}
+              onMouseEnter={(e) => {
+                if (!loading) {
+                  e.currentTarget.style.background = 'linear-gradient(to right, #0049F3, #003BBF)';
+                  e.currentTarget.style.boxShadow = '0 15px 50px rgba(38, 109, 248, 0.6)';
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!loading) {
+                  e.currentTarget.style.background = 'linear-gradient(to right, #266df8, #0049F3)';
+                  e.currentTarget.style.boxShadow = '0 10px 40px rgba(38, 109, 248, 0.5)';
+                }
+              }}
             >
               {loading ? (
                 <span className="flex items-center justify-center">

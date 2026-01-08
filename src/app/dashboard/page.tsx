@@ -70,7 +70,7 @@ export default async function DashboardPage() {
         {profile.role === 'admin' && (
           <Card>
             <CardContent className="flex items-center p-6">
-              <div className="flex-shrink-0 bg-blue-100 rounded-lg p-3">
+              <div className="shrink-0 bg-blue-100 rounded-lg p-3">
                 <Users className="text-blue-600" size={32} />
               </div>
               <div className="ml-4">
@@ -85,7 +85,7 @@ export default async function DashboardPage() {
         
         <Card>
           <CardContent className="flex items-center p-6">
-            <div className="flex-shrink-0 bg-purple-100 rounded-lg p-3">
+            <div className="shrink-0 bg-purple-100 rounded-lg p-3">
               <Calculator className="text-purple-600" size={32} />
             </div>
             <div className="ml-4">
@@ -99,7 +99,7 @@ export default async function DashboardPage() {
         
         <Card>
           <CardContent className="flex items-center p-6">
-            <div className="flex-shrink-0 bg-green-100 rounded-lg p-3">
+            <div className="shrink-0 bg-green-100 rounded-lg p-3">
               <ShoppingCart className="text-green-600" size={32} />
             </div>
             <div className="ml-4">
@@ -113,7 +113,7 @@ export default async function DashboardPage() {
         
         <Card>
           <CardContent className="flex items-center p-6">
-            <div className="flex-shrink-0 bg-yellow-100 rounded-lg p-3">
+            <div className="shrink-0 bg-yellow-100 rounded-lg p-3">
               <DollarSign className="text-yellow-600" size={32} />
             </div>
             <div className="ml-4">

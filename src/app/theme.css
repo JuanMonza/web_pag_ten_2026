@@ -1,0 +1,19 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-500: #266df8;
+  --color-brand-600: #0049F3;
+  --color-brand-700: #003BBF;
+  --color-brand-900: #081338;
+  
+  --animate-float: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
