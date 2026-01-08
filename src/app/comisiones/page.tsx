@@ -1,115 +1,185 @@
-import { createClient } from '@/lib/supabase-server';
+'use client';
+
+import { useState } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/Table';
 import { formatCurrency, formatDate } from '@/utils/formatters';
-import { Comision } from '@/types/cotizacion.types';
+import { PageHeader } from '@/components/ui/PageHeader';
+import { GlassPagination } from '@/components/ui/GlassComponents';
 
-async function obtenerComisiones(userId: string, role: string) {
-  const supabase = await createClient();
-  
-  if (role === 'admin') {
-    const { data } = await supabase
-      .from('comisiones')
-      .select(`
-        *,
-        tendero:tenderos(*, user:users(name)),
-        venta:ventas(*, cotizacion:cotizaciones(*, cliente:clientes(*)))
-      `)
-      .order('created_at', { ascending: false });
-      
-    return data || [];
-  } else if (role === 'tendero') {
-    const { data: tendero } = await supabase
-      .from('tenderos')
-      .select('id')
-      .eq('user_id', userId)
-      .single();
-      
-    if (!tendero) return [];
-    
-    const { data } = await supabase
-      .from('comisiones')
-      .select(`
-        *,
-        venta:ventas(*, cotizacion:cotizaciones(*, cliente:clientes(*)))
-      `)
-      .eq('tendero_id', tendero.id)
-      .order('created_at', { ascending: false });
-      
-    return data || [];
-  }
-  
-  return [];
-}
+// DATOS MOCK PARA DEMO
+const MOCK_COMISIONES = [
+  {
+    id: '1',
+    monto: 450000,
+    porcentaje: 15,
+    estado: 'pagada',
+    fecha_pago: '2025-12-15',
+    created_at: '2025-12-01',
+    tendero: { user: { name: 'Juan Pérez' } },
+    venta: {
+      monto_total: 3000000,
+      cotizacion: {
+        cliente: { nombre: 'María González', documento: '12345678' }
+      }
+    }
+  },
+  {
+    id: '2',
+    monto: 300000,
+    porcentaje: 10,
+    estado: 'pendiente',
+    fecha_pago: null,
+    created_at: '2025-12-10',
+    tendero: { user: { name: 'Carlos Rodríguez' } },
+    venta: {
+      monto_total: 3000000,
+      cotizacion: {
+        cliente: { nombre: 'Pedro Martínez', documento: '87654321' }
+      }
+    }
+  },
+  {
+    id: '3',
+    monto: 525000,
+    porcentaje: 17.5,
+    estado: 'pagada',
+    fecha_pago: '2025-11-20',
+    created_at: '2025-11-05',
+    tendero: { user: { name: 'Ana López' } },
+    venta: {
+      monto_total: 3000000,
+      cotizacion: {
+        cliente: { nombre: 'Laura Sánchez', documento: '11223344' }
+      }
+    }
+  },
+];
 
-export default async function ComisionesPage() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  
-  if (!user) return null;
-  
-  const { data: profile } = await supabase
-    .from('users')
-    .select('*')
-    .eq('id', user.id)
-    .single();
-    
-  const comisiones = await obtenerComisiones(user.id, profile.role);
-  
-  const totalComisiones = comisiones.reduce((sum: number, c: Comision) => sum + c.valor_comision, 0);
-  
+export default function ComisionesPage() {
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const totalComisiones = MOCK_COMISIONES.reduce((sum, c) => sum + c.monto, 0);
+  const comisionesPagadas = MOCK_COMISIONES.filter(c => c.estado === 'pagada').length;
+  const comisionesPendientes = MOCK_COMISIONES.filter(c => c.estado === 'pendiente').length;
+
+  const itemsPerPage = 10;
+  const totalPages = Math.ceil(MOCK_COMISIONES.length / itemsPerPage);
+  const paginatedData = MOCK_COMISIONES.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
   return (
-    <div>
-      <h1 className="text-3xl font-bold text-gray-900 mb-8">Comisiones</h1>
+    <div className="space-y-6">
+      <PageHeader 
+        title="Comisiones" 
+        subtitle="Control de comisiones y pagos a tenderos" 
+      />
       
-      <Card className="mb-6 bg-linear-to-r from-green-500 to-green-600 text-white">
-        <CardContent className="p-6">
-          <p className="text-lg opacity-90">Total Comisiones Acumuladas</p>
-          <p className="text-4xl font-bold mt-2">{formatCurrency(totalComisiones)}</p>
-        </CardContent>
-      </Card>
-      
+      {/* Banner DEMO */}
+      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+        <p className="text-yellow-800 font-semibold">
+          🚀 Modo Demo - Datos de ejemplo para demostración
+        </p>
+      </div>
+
+      {/* Resumen */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>Total Comisiones</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-3xl font-bold text-blue-600">
+              {formatCurrency(totalComisiones)}
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Pagadas</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-3xl font-bold text-green-600">
+              {comisionesPagadas}
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Pendientes</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-3xl font-bold text-orange-600">
+              {comisionesPendientes}
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Tabla de Comisiones */}
       <Card>
         <CardHeader>
           <CardTitle>Historial de Comisiones</CardTitle>
         </CardHeader>
         <CardContent>
-          {comisiones.length === 0 ? (
-            <p className="text-center text-gray-500 py-8">
-              No hay comisiones registradas
-            </p>
-          ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Cliente</TableHead>
-                  <TableHead>Valor Venta</TableHead>
-                  <TableHead>Comisión</TableHead>
-                  {profile.role === 'admin' && <TableHead>Tendero</TableHead>}
-                  <TableHead>Fecha</TableHead>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Fecha</TableHead>
+                <TableHead>Tendero</TableHead>
+                <TableHead>Cliente</TableHead>
+                <TableHead>Venta</TableHead>
+                <TableHead>%</TableHead>
+                <TableHead>Comisión</TableHead>
+                <TableHead>Estado</TableHead>
+                <TableHead>Fecha Pago</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {paginatedData.map((comision) => (
+                <TableRow key={comision.id}>
+                  <TableCell>{formatDate(comision.created_at)}</TableCell>
+                  <TableCell>{comision.tendero.user.name}</TableCell>
+                  <TableCell>
+                    {comision.venta.cotizacion.cliente.nombre}
+                    <br />
+                    <span className="text-xs text-gray-500">
+                      {comision.venta.cotizacion.cliente.documento}
+                    </span>
+                  </TableCell>
+                  <TableCell>{formatCurrency(comision.venta.monto_total)}</TableCell>
+                  <TableCell>{comision.porcentaje}%</TableCell>
+                  <TableCell className="font-semibold text-green-600">
+                    {formatCurrency(comision.monto)}
+                  </TableCell>
+                  <TableCell>
+                    <span
+                      className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                        comision.estado === 'pagada'
+                          ? 'bg-green-100 text-green-800'
+                          : 'bg-orange-100 text-orange-800'
+                      }`}
+                    >
+                      {comision.estado === 'pagada' ? 'Pagada' : 'Pendiente'}
+                    </span>
+                  </TableCell>
+                  <TableCell>
+                    {comision.fecha_pago ? formatDate(comision.fecha_pago) : '-'}
+                  </TableCell>
                 </TableRow>
-              </TableHeader>
-              <TableBody>
-                {comisiones.map((comision: Comision) => (
-                  <TableRow key={comision.id}>
-                    <TableCell>
-                      {comision.venta?.cotizacion?.cliente?.nombre || 'N/A'}
-                    </TableCell>
-                    <TableCell>
-                      {formatCurrency(comision.venta?.valor_pagado || 0)}
-                    </TableCell>
-                    <TableCell className="font-semibold text-green-600">
-                      {formatCurrency(comision.valor_comision)}
-                    </TableCell>
-                    {profile.role === 'admin' && (
-                      <TableCell>{comision.tendero?.user?.name || 'N/A'}</TableCell>
-                    )}
-                    <TableCell>{formatDate(comision.created_at)}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          )}
+              ))}
+            </TableBody>
+          </Table>
+          
+          <GlassPagination 
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
         </CardContent>
       </Card>
     </div>

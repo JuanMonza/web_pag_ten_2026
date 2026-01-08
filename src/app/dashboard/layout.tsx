@@ -1,33 +1,31 @@
-import { redirect } from 'next/navigation';
-import { createClient } from '@/lib/supabase-server';
-import { Sidebar } from '@/components/Sidebar';
+'use client';
 
-export default async function DashboardLayout({
+import { Sidebar } from '@/components/Sidebar';
+import { getCurrentUser } from '@/lib/mock-auth';
+import { useEffect, useState } from 'react';
+
+export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const supabase = await createClient();
-  
-  const { data: { user } } = await supabase.auth.getUser();
-  
-  if (!user) {
-    redirect('/auth/login');
-  }
-  
-  const { data: profile } = await supabase
-    .from('users')
-    .select('*')
-    .eq('id', user.id)
-    .single();
-  
-  if (!profile || !profile.active) {
-    redirect('/auth/login');
-  }
-  
+  const [userName, setUserName] = useState('Usuario Demo');
+  const [userRole, setUserRole] = useState<'admin' | 'callcenter' | 'tendero'>('admin');
+
+  useEffect(() => {
+    const user = getCurrentUser();
+    if (user) {
+      setUserName(user.name);
+      setUserRole(user.role);
+      console.log('🎭 [LAYOUT] Usuario cargado:', user.name, '- Rol:', user.role);
+    } else {
+      console.warn('⚠️ [LAYOUT] No se encontró usuario en sesión');
+    }
+  }, []);
+
   return (
     <div className="flex h-screen bg-gray-100">
-      <Sidebar userRole={profile.role} userName={profile.name} />
+      <Sidebar userRole={userRole} userName={userName} />
       <main className="flex-1 overflow-y-auto p-8">
         {children}
       </main>

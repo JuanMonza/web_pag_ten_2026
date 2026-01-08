@@ -12,7 +12,8 @@ import {
   LogOut,
   Menu,
   X,
-  Settings
+  Settings,
+  FileText
 } from 'lucide-react';
 import { useState } from 'react';
 import { signOut } from '@/services/auth.service';
@@ -31,10 +32,12 @@ export function Sidebar({ userRole, userName }: SidebarProps) {
   const menuItems = [
     { href: '/dashboard', label: 'Dashboard', icon: Home, roles: ['admin', 'tendero', 'callcenter'] },
     { href: '/cotizador', label: 'Cotizador', icon: Calculator, roles: ['tendero', 'callcenter'] },
+    { href: '/cotizaciones', label: 'Cotizaciones', icon: FileText, roles: ['callcenter'] },
     { href: '/clientes', label: 'Clientes', icon: Users, roles: ['admin', 'tendero', 'callcenter'] },
     { href: '/ventas', label: 'Ventas', icon: ShoppingCart, roles: ['admin', 'tendero', 'callcenter'] },
     { href: '/comisiones', label: 'Comisiones', icon: DollarSign, roles: ['admin', 'tendero'] },
     { href: '/admin/tenderos', label: 'Gestión Tenderos', icon: Settings, roles: ['admin'] },
+    { href: '/admin/callcenter', label: 'Gestión Call Center', icon: Settings, roles: ['admin'] },
     { href: '/perfil', label: 'Perfil', icon: User, roles: ['admin', 'tendero', 'callcenter'] },
   ];
   
