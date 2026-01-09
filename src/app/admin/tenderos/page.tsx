@@ -11,8 +11,12 @@ import { PageHeader } from '@/components/ui/PageHeader';
 interface Tendero {
   id: string;
   nombre: string;
+  tipoDocumento: 'CC' | 'NIT' | 'PEP';
+  numeroDocumento: string;
   telefono: string;
   ciudad: string;
+  nombreTienda: string;
+  direccionTienda: string;
   comision: number;
   active: boolean;
 }
@@ -21,24 +25,36 @@ const INITIAL_TENDEROS: Tendero[] = [
   {
     id: '1',
     nombre: 'Juan Pérez',
+    tipoDocumento: 'CC',
+    numeroDocumento: '1234567890',
     telefono: '3101111111',
     ciudad: 'Bogotá',
+    nombreTienda: 'Tienda Don Juan',
+    direccionTienda: 'Calle 123 #45-67',
     comision: 15,
     active: true,
   },
   {
     id: '2',
     nombre: 'Carlos R',
+    tipoDocumento: 'CC',
+    numeroDocumento: '9876543210',
     telefono: '3202222222',
     ciudad: 'Medellín',
+    nombreTienda: 'Supermercado Carlos',
+    direccionTienda: 'Carrera 50 #20-30',
     comision: 10,
     active: true,
   },
   {
     id: '3',
     nombre: 'Ana López',
+    tipoDocumento: 'CC',
+    numeroDocumento: '5555555555',
     telefono: '3153333333',
     ciudad: 'Cali',
+    nombreTienda: 'Minimercado Ana',
+    direccionTienda: 'Avenida 6 #10-15',
     comision: 17.5,
     active: false,
   },
@@ -50,7 +66,16 @@ export default function AdminTenderosPage() {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [currentTendero, setCurrentTendero] = useState<Tendero | null>(null);
   const [deleteId, setDeleteId] = useState<string | null>(null);
-  const [formData, setFormData] = useState({ nombre: '', telefono: '', ciudad: '', comision: 0 });
+  const [formData, setFormData] = useState({ 
+    nombre: '', 
+    tipoDocumento: 'CC' as 'CC' | 'NIT' | 'PEP',
+    numeroDocumento: '',
+    telefono: '', 
+    ciudad: '', 
+    nombreTienda: '',
+    direccionTienda: '',
+    comision: 0 
+  });
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -68,7 +93,16 @@ export default function AdminTenderosPage() {
 
   const handleCreate = () => {
     setCurrentTendero(null);
-    setFormData({ nombre: '', telefono: '', ciudad: '', comision: 0 });
+    setFormData({ 
+      nombre: '', 
+      tipoDocumento: 'CC',
+      numeroDocumento: '',
+      telefono: '', 
+      ciudad: '', 
+      nombreTienda: '',
+      direccionTienda: '',
+      comision: 0 
+    });
     setIsCreateEditModalOpen(true);
   };
 
@@ -76,8 +110,12 @@ export default function AdminTenderosPage() {
     setCurrentTendero(tendero);
     setFormData({
       nombre: tendero.nombre,
+      tipoDocumento: tendero.tipoDocumento,
+      numeroDocumento: tendero.numeroDocumento,
       telefono: tendero.telefono,
       ciudad: tendero.ciudad,
+      nombreTienda: tendero.nombreTienda,
+      direccionTienda: tendero.direccionTienda,
       comision: tendero.comision,
     });
     setIsCreateEditModalOpen(true);
@@ -137,7 +175,7 @@ export default function AdminTenderosPage() {
       <div className="flex justify-end items-center mb-8">
         <GlassButton
           onClick={handleCreate}
-          className="bg-linear-to-r from-[#266df8] to-[#0049F3]"
+          className="bg-linear-to-r from-[#266df8] to-[#0049F3] text-white"
         >
           <UserPlus className="w-5 h-5 mr-2" />
           + Nuevo Tendero
@@ -239,48 +277,95 @@ export default function AdminTenderosPage() {
       >
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Nombre Completo</label>
+            <label className="block text-sm font-medium text-white mb-1">Nombre Completo</label>
             <Input
               value={formData.nombre}
               onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
               placeholder="Ej: Juan Pérez"
+              className="bg-white text-gray-900 border-white/30 shadow-lg"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Teléfono</label>
+            <label className="block text-sm font-medium text-white mb-1">Tipo de Documento</label>
+            <select
+              value={formData.tipoDocumento}
+              onChange={(e) => setFormData({ ...formData, tipoDocumento: e.target.value as 'CC' | 'NIT' | 'PEP' })}
+              className="w-full px-3 py-2 rounded-lg border border-white/30 bg-white text-gray-900 shadow-lg focus:outline-none focus:ring-2 focus:ring-white/50"
+            >
+              <option value="CC">Cédula de Ciudadanía (CC)</option>
+              <option value="NIT">NIT</option>
+              <option value="PEP">Permiso Especial de Permanencia (PEP)</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-white mb-1">Número de Documento</label>
+            <Input
+              value={formData.numeroDocumento}
+              onChange={(e) => setFormData({ ...formData, numeroDocumento: e.target.value })}
+              placeholder="Ej: 1234567890"
+              className="bg-white text-gray-900 border-white/30 shadow-lg"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-white mb-1">Teléfono</label>
             <Input
               value={formData.telefono}
               onChange={(e) => setFormData({ ...formData, telefono: e.target.value })}
               placeholder="Ej: 3001234567"
+              className="bg-white text-gray-900 border-white/30 shadow-lg"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Ciudad</label>
+            <label className="block text-sm font-medium text-white mb-1">Ciudad</label>
             <Input
               value={formData.ciudad}
               onChange={(e) => setFormData({ ...formData, ciudad: e.target.value })}
               placeholder="Ej: Bogotá"
+              className="bg-white text-gray-900 border-white/30 shadow-lg"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Comisión (%)</label>
+            <label className="block text-sm font-medium text-white mb-1">Nombre de la Tienda</label>
+            <Input
+              value={formData.nombreTienda}
+              onChange={(e) => setFormData({ ...formData, nombreTienda: e.target.value })}
+              placeholder="Ej: Tienda Don Juan"
+              className="bg-white text-gray-900 border-white/30 shadow-lg"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-white mb-1">Dirección de la Tienda</label>
+            <Input
+              value={formData.direccionTienda}
+              onChange={(e) => setFormData({ ...formData, direccionTienda: e.target.value })}
+              placeholder="Ej: Calle 123 #45-67"
+              className="bg-white text-gray-900 border-white/30 shadow-lg"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-white mb-1">Comisión (%)</label>
             <Input
               type="number"
               step="0.5"
               value={formData.comision}
               onChange={(e) => setFormData({ ...formData, comision: parseFloat(e.target.value) || 0 })}
               placeholder="Ej: 15"
+              className="bg-white text-gray-900 border-white/30 shadow-lg"
             />
           </div>
 
           <div className="flex gap-3 pt-4">
             <GlassButton
               onClick={handleSave}
-              className="flex-1 bg-linear-to-r from-[#266df8] to-[#0049F3]"
-              disabled={!formData.nombre || !formData.telefono || !formData.ciudad}
+              className="flex-1 bg-linear-to-r from-[#266df8] to-[#0049F3] text-white"
+              disabled={!formData.nombre || !formData.numeroDocumento || !formData.telefono || !formData.ciudad || !formData.nombreTienda || !formData.direccionTienda}
             >
               {currentTendero ? 'Guardar Cambios' : 'Crear Tendero'}
             </GlassButton>

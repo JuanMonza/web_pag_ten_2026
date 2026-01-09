@@ -9,6 +9,11 @@ interface MockUser {
   phone: string;
   role: 'admin' | 'callcenter' | 'tendero';
   active: boolean;
+  ciudad?: string;
+  direccion?: string;
+  nombreTienda?: string;
+  direccionTienda?: string;
+  avatar?: string;
 }
 
 // Usuarios de prueba
@@ -21,6 +26,11 @@ const MOCK_USERS: MockUser[] = [
     phone: '3001234567',
     role: 'admin',
     active: true,
+    ciudad: 'Bogotá',
+    direccion: 'Calle 100 #15-20, Oficina 501',
+    nombreTienda: 'Oficina Central',
+    direccionTienda: 'Carrera 7 #32-16, Edificio Administrativo',
+    avatar: 'https://ui-avatars.com/api/?name=Administrador+Demo&background=0049F3&color=fff&size=200',
   },
   {
     id: '2',
@@ -30,6 +40,11 @@ const MOCK_USERS: MockUser[] = [
     phone: '3009876543',
     role: 'callcenter',
     active: true,
+    ciudad: 'Medellín',
+    direccion: 'Calle 50 #45-67, Apto 302',
+    nombreTienda: 'Centro de Atención Medellín',
+    direccionTienda: 'Carrera 43A #1-50, Local 105',
+    avatar: 'https://ui-avatars.com/api/?name=Carlos+Call+Center&background=10b981&color=fff&size=200',
   },
   {
     id: '3',
@@ -39,6 +54,11 @@ const MOCK_USERS: MockUser[] = [
     phone: '3005551234',
     role: 'tendero',
     active: true,
+    ciudad: 'Cali',
+    direccion: 'Avenida 5 #12-34, Casa 5',
+    nombreTienda: 'Tienda El Renacer',
+    direccionTienda: 'Carrera 45 #78-90, Local 3',
+    avatar: 'https://ui-avatars.com/api/?name=Juan+Tendero&background=f59e0b&color=fff&size=200',
   },
 ];
 

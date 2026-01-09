@@ -1,14 +1,16 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/Table';
 import { formatCurrency, formatDate } from '@/utils/formatters';
 import { downloadExcel } from '@/utils/excel';
 import { getCurrentUser } from '@/lib/mock-auth';
 import { PageHeader } from '@/components/ui/PageHeader';
-import { GlassPagination } from '@/components/ui/GlassComponents';
-import { CreditCard, Wallet, DollarSign } from 'lucide-react';
+import { GlassPagination, GlassModal, GlassButton } from '@/components/ui/GlassComponents';
+import { CreditCard, Wallet, DollarSign, Printer, FileText } from 'lucide-react';
+import { ThermalReceipt } from '@/components/receipts/ThermalReceipt';
+import { useReactToPrint } from 'react-to-print';
 
 const MOCK_VENTAS = [
   {
@@ -58,6 +60,10 @@ export default function VentasPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [userRole, setUserRole] = useState<string>('');
   const [userName, setUserName] = useState<string>('');
+  const [selectedVenta, setSelectedVenta] = useState<any>(null);
+  const [showReceiptModal, setShowReceiptModal] = useState(false);
+  const [receiptType, setReceiptType] = useState<'cliente' | 'cierre'>('cliente');
+  const receiptRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const user = getCurrentUser();
@@ -130,6 +136,100 @@ export default function VentasPage() {
     downloadExcel(ventas, 'ventas');
   };
 
+  const handlePrintReceipt = () => {
+    // Crear un iframe oculto para imprimir
+    const printContent = receiptRef.current;
+    if (!printContent) return;
+
+    const iframe = document.createElement('iframe');
+    iframe.style.position = 'absolute';
+    iframe.style.width = '0px';
+    iframe.style.height = '0px';
+    iframe.style.border = 'none';
+    
+    document.body.appendChild(iframe);
+    
+    const iframeDoc = iframe.contentWindow?.document;
+    if (!iframeDoc) return;
+
+    iframeDoc.open();
+    iframeDoc.write(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Factura-${selectedVenta?.id || 'N/A'}</title>
+          <style>
+            @page {
+              size: 80mm auto;
+              margin: 0;
+            }
+            body {
+              margin: 0;
+              padding: 0;
+              font-family: 'Courier New', monospace;
+            }
+            @media print {
+              body {
+                width: 80mm;
+              }
+            }
+          </style>
+        </head>
+        <body>
+          ${printContent.innerHTML}
+        </body>
+      </html>
+    `);
+    iframeDoc.close();
+
+    // Esperar a que el contenido cargue
+    iframe.onload = () => {
+      setTimeout(() => {
+        iframe.contentWindow?.focus();
+        iframe.contentWindow?.print();
+        
+        // Remover el iframe después de imprimir
+        setTimeout(() => {
+          document.body.removeChild(iframe);
+        }, 1000);
+      }, 250);
+    };
+  };
+
+  const openReceiptModal = (venta: any, type: 'cliente' | 'cierre') => {
+    setSelectedVenta(venta);
+    setReceiptType(type);
+    setShowReceiptModal(true);
+  };
+
+  const printCierreDia = () => {
+    const ventasHoy = ventas.filter(v => {
+      const ventaDate = new Date(v.created_at || v.createdAt);
+      const today = new Date();
+      return ventaDate.toDateString() === today.toDateString();
+    });
+
+    if (ventasHoy.length === 0) {
+      alert('No hay ventas registradas hoy para generar el cierre.');
+      return;
+    }
+
+    const totalDia = ventasHoy.reduce((sum, v) => sum + (v.total || v.monto_total || 0), 0);
+    const cierreData = {
+      id: 'CIERRE-' + new Date().toISOString().split('T')[0],
+      cliente: `Cierre del Día - ${ventasHoy.length} ventas`,
+      plan: 'Resumen Diario',
+      total: totalDia,
+      monto_total: totalDia,
+      metodoPago: 'Múltiples',
+      estado: 'completada',
+      created_at: new Date().toISOString(),
+      ventasDetalle: ventasHoy,
+    };
+
+    openReceiptModal(cierreData, 'cierre');
+  };
+
   const showPaymentStats = userRole === 'admin' || userRole === 'tendero';
 
   return (
@@ -174,10 +274,17 @@ export default function VentasPage() {
       <div className="flex justify-end items-center mb-6">
         <div className="flex gap-3">
           <button
+            onClick={printCierreDia}
+            className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg font-medium transition-colors flex items-center gap-2"
+          >
+            <FileText className="w-4 h-4" />
+            Cierre del Día
+          </button>
+          <button
             onClick={handleDownloadExcel}
             className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-medium transition-colors"
           >
-            📥 Descargar Excel
+            Descargar Excel
           </button>
         </div>
       </div>
@@ -196,6 +303,7 @@ export default function VentasPage() {
                 <TableHead>Método de Pago</TableHead>
                 <TableHead>Estado</TableHead>
                 <TableHead>Fecha</TableHead>
+                <TableHead className="text-center">Acciones</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -242,6 +350,17 @@ export default function VentasPage() {
                       </span>
                     </TableCell>
                     <TableCell>{formatDate(fecha)}</TableCell>
+                    <TableCell>
+                      <div className="flex items-center justify-center gap-2">
+                        <button
+                          onClick={() => openReceiptModal(venta, 'cliente')}
+                          className="p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                          title="Imprimir Factura"
+                        >
+                          <Printer className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </TableCell>
                   </TableRow>
                 );
               })}
@@ -255,6 +374,53 @@ export default function VentasPage() {
           />
         </CardContent>
       </Card>
+
+      {/* Modal de Factura */}
+      <GlassModal
+        isOpen={showReceiptModal}
+        onClose={() => setShowReceiptModal(false)}
+        title={receiptType === 'cliente' ? 'Factura de Venta' : 'Cierre del Día'}
+        maxWidth="lg"
+      >
+        <div className="space-y-4">
+          {/* Contenedor con scroll para previsualización */}
+          <div 
+            style={{ 
+              maxHeight: '70vh', 
+              overflowY: 'auto',
+              overflowX: 'hidden',
+              border: '1px solid #e5e7eb',
+              borderRadius: '8px',
+              backgroundColor: '#f9fafb'
+            }}
+          >
+            <div ref={receiptRef} style={{ padding: '20px', backgroundColor: 'white', margin: '10px' }}>
+              {selectedVenta && (
+                <ThermalReceipt
+                  venta={selectedVenta}
+                  tipo={receiptType}
+                />
+              )}
+            </div>
+          </div>
+          <div className="flex gap-3 pt-4">
+            <GlassButton
+              onClick={handlePrintReceipt}
+              className="flex-1 bg-blue-600 hover:bg-blue-700"
+            >
+              <Printer className="w-4 h-4 mr-2" />
+              Imprimir
+            </GlassButton>
+            <GlassButton
+              variant="secondary"
+              onClick={() => setShowReceiptModal(false)}
+              className="flex-1"
+            >
+              Cerrar
+            </GlassButton>
+          </div>
+        </div>
+      </GlassModal>
     </div>
   );
 }

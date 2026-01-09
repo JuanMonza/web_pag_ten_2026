@@ -38,32 +38,53 @@ export function downloadExcel(data: Record<string, unknown>[], filename: string)
   document.body.removeChild(link);
 }
 
-// Simular envío de correo
-export function sendEmailNotification(to: string, subject: string, message: string) {
-  console.log('📧 Enviando correo...');
-  console.log('Para:', to);
+import { sendEmail, emailTemplates } from '@/services/email.service';
+
+// Envío de correo con Resend
+export async function sendEmailNotification(to: string, subject: string, message: string, html?: string) {
+  console.log('📧 Enviando correo a:', to);
   console.log('Asunto:', subject);
-  console.log('Mensaje:', message);
   
-  // En producción, aquí se llamaría a un endpoint de backend
-  return true;
+  try {
+    const success = await sendEmail({
+      to,
+      subject,
+      html: html || `<p>${message.replace(/\n/g, '<br>')}</p>`,
+      text: message,
+    });
+
+    if (success) {
+      console.log('✅ Correo enviado exitosamente');
+    } else {
+      console.error('❌ Error al enviar correo');
+    }
+    
+    return success;
+  } catch (error) {
+    console.error('❌ Error en sendEmailNotification:', error);
+    return false;
+  }
 }
 
 // Enviar correos de confirmación al registrar nuevo usuario
-export function sendRegistrationEmails(clienteEmail: string, clienteNombre: string, adminEmail: string = 'admin@demo.com') {
+export async function sendRegistrationEmails(clienteEmail: string, clienteNombre: string, adminEmail: string = 'admin@demo.com') {
   // Correo al cliente
-  sendEmailNotification(
-    clienteEmail,
-    '¡Bienvenido a Planes Exequiales!',
-    `Hola ${clienteNombre},\n\nTu cuenta ha sido creada exitosamente. Gracias por confiar en nosotros.\n\nSaludos,\nEquipo Planes Exequiales`
-  );
+  const clienteTemplate = emailTemplates.registroCliente(clienteNombre);
+  await sendEmail({
+    to: clienteEmail,
+    subject: clienteTemplate.subject,
+    html: clienteTemplate.html,
+    text: clienteTemplate.text,
+  });
 
   // Correo al admin
-  sendEmailNotification(
-    adminEmail,
-    'Nuevo registro en el sistema',
-    `Un nuevo usuario se ha registrado:\n\nNombre: ${clienteNombre}\nEmail: ${clienteEmail}\n\nRevisa el panel de administración para más detalles.`
-  );
+  const adminTemplate = emailTemplates.notificacionAdmin(clienteNombre, clienteEmail);
+  await sendEmail({
+    to: adminEmail,
+    subject: adminTemplate.subject,
+    html: adminTemplate.html,
+    text: adminTemplate.text,
+  });
 
   return true;
 }

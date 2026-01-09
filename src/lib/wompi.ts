@@ -66,8 +66,10 @@ export const simulateWompiApproval = async (transactionId: string): Promise<Womp
   return transaction;
 };
 
+import { sendEmail, emailTemplates } from '@/services/email.service';
+
 // Enviar email de confirmación
-export const sendPurchaseConfirmationEmail = (
+export const sendPurchaseConfirmationEmail = async (
   customerEmail: string,
   customerName: string,
   amount: number,
@@ -78,8 +80,31 @@ export const sendPurchaseConfirmationEmail = (
   console.log('📧 Cliente:', customerName);
   console.log('📧 Monto:', amount);
   console.log('📧 Referencia:', reference);
-  console.log('✅ [EMAIL] Confirmación enviada (modo demo)');
   
-  // En producción, usar un servicio de email como SendGrid, AWS SES, etc.
-  return true;
+  try {
+    const template = emailTemplates.confirmacionVenta(
+      customerName,
+      'Plan Exequial',
+      amount,
+      `FAC-${reference}`
+    );
+
+    const success = await sendEmail({
+      to: customerEmail,
+      subject: template.subject,
+      html: template.html,
+      text: template.text,
+    });
+
+    if (success) {
+      console.log('✅ [EMAIL] Confirmación enviada exitosamente');
+    } else {
+      console.error('❌ [EMAIL] Error al enviar confirmación');
+    }
+
+    return success;
+  } catch (error) {
+    console.error('❌ [EMAIL] Error:', error);
+    return false;
+  }
 };

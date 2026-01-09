@@ -7,6 +7,18 @@ const nextConfig: NextConfig = {
   // Configuración vacía para Turbopack (silencia el warning)
   turbopack: {},
   
+  // Configuración de imágenes externas
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'ui-avatars.com',
+        port: '',
+        pathname: '/api/**',
+      },
+    ],
+  },
+  
   // Headers de seguridad - permite eval en desarrollo
   async headers() {
     return [

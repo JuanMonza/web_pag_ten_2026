@@ -255,49 +255,49 @@ export default function CallCenterManagementPage() {
       >
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
+            <label className="block text-sm font-semibold text-white mb-2">
               Nombre Completo *
             </label>
             <input
               type="text"
               value={formData.nombre}
               onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
-              className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:border-[#0049F3] focus:ring-2 focus:ring-[#0049F3]/20 outline-none"
+              className="w-full px-4 py-2 rounded-lg border border-white/30 bg-white text-gray-900 shadow-lg focus:border-white focus:ring-2 focus:ring-white/50 outline-none"
               placeholder="Ej: Carlos Pérez"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
+            <label className="block text-sm font-semibold text-white mb-2">
               Email *
             </label>
             <input
               type="email"
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:border-[#0049F3] focus:ring-2 focus:ring-[#0049F3]/20 outline-none"
+              className="w-full px-4 py-2 rounded-lg border border-white/30 bg-white text-gray-900 shadow-lg focus:border-white focus:ring-2 focus:ring-white/50 outline-none"
               placeholder="Ej: carlos@ejemplo.com"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
+            <label className="block text-sm font-semibold text-white mb-2">
               Teléfono *
             </label>
             <input
               type="tel"
               value={formData.telefono}
               onChange={(e) => setFormData({ ...formData, telefono: e.target.value })}
-              className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:border-[#0049F3] focus:ring-2 focus:ring-[#0049F3]/20 outline-none"
+              className="w-full px-4 py-2 rounded-lg border border-white/30 bg-white text-gray-900 shadow-lg focus:border-white focus:ring-2 focus:ring-white/50 outline-none"
               placeholder="Ej: 3001234567"
             />
           </div>
 
           <div className="flex gap-3 pt-4">
-            <GlassButton variant="primary" onClick={handleSubmit} className="flex-1">
+            <GlassButton variant="primary" onClick={handleSubmit} className="flex-1 text-blue-600 font-semibold">
               {editingCallCenter ? 'Actualizar' : 'Crear'}
             </GlassButton>
-            <GlassButton variant="secondary" onClick={() => setShowModal(false)} className="flex-1">
+            <GlassButton variant="secondary" onClick={() => setShowModal(false)} className="flex-1 text-white">
               Cancelar
             </GlassButton>
           </div>
