@@ -11,7 +11,17 @@ import { CheckCircle, XCircle, Eye } from 'lucide-react';
 
 interface Cotizacion {
   id: string;
-  cotizantes: Array<{ nombre: string; cedula: string; telefono: string; fechaNacimiento: string; edad: number }>;
+  cotizantes: Array<{ 
+    nombre: string; 
+    tipoCedula?: string;
+    cedula: string; 
+    telefono: string; 
+    fechaNacimiento: string; 
+    edad: number;
+    email?: string;
+    parentesco?: string;
+    esPensionado?: boolean;
+  }>;
   mascotas: Array<{ nombre: string; raza: string; edad: number }>;
   total: number;
   createdBy: string;

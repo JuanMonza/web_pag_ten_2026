@@ -1,5 +1,5 @@
 // Utilidad para descargar datos como Excel (simulado con CSV)
-export function downloadExcel(data: any[], filename: string) {
+export function downloadExcel(data: Record<string, unknown>[], filename: string) {
   // Convertir array de objetos a CSV
   if (data.length === 0) {
     alert('No hay datos para descargar');

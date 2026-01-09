@@ -2,7 +2,7 @@
 
 import { ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
-import { X, Home, ArrowLeft, ChevronLeft, ChevronRight } from 'lucide-react';
+import { X, Home, ArrowLeft, ChevronLeft, ChevronRight, CheckCircle, XCircle, Info } from 'lucide-react';
 
 interface GlassModalProps {
   isOpen: boolean;
@@ -103,18 +103,18 @@ export function Toast({ message, type, onClose }: ToastProps) {
     info: 'from-blue-500 to-blue-600',
   };
 
-  const icons = {
-    success: '✅',
-    error: '❌',
-    info: 'ℹ️',
-  };
+  const IconComponent = {
+    success: CheckCircle,
+    error: XCircle,
+    info: Info,
+  }[type];
 
   return (
     <div 
-      className={`fixed top-4 right-4 z-50 bg-gradient-to-r ${styles[type]} text-white px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-3`}
+      className={`fixed top-4 right-4 z-50 bg-linear-to-r ${styles[type]} text-white px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-3`}
       style={{ backdropFilter: 'blur(10px)', animation: 'slideIn 0.3s ease-out' }}
     >
-      <span className="text-2xl">{icons[type]}</span>
+      <IconComponent className="w-6 h-6" />
       <span className="font-semibold">{message}</span>
       <button onClick={onClose} className="ml-4 hover:opacity-75">
         <X className="w-5 h-5" />

@@ -68,7 +68,7 @@ export async function recoverPassword(email: string) {
 
 export async function resetPassword(newPassword: string) {
   if (isMockMode() || !isSupabaseConfigured()) {
-    await mockAuth.updateUser({ password: newPassword });
+    await mockAuth.updateUser();
     return;
   }
   

@@ -131,7 +131,7 @@ export const mockAuth = {
   },
   
   // Actualizar contraseña (simulado)
-  updateUser: async (updates: { password?: string }) => {
+  updateUser: async () => {
     if (!currentSession) {
       throw new Error('No hay sesión activa');
     }

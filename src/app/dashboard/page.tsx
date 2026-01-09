@@ -5,6 +5,7 @@ import { Users, ShoppingCart, DollarSign, Calculator, TrendingUp, Award } from '
 import { formatCurrency } from '@/utils/formatters';
 import { useRouter } from 'next/navigation';
 import { getCurrentUser } from '@/lib/mock-auth';
+import { useState, useEffect } from 'react';
 
 const MOCK_STATS = {
   totalCotizaciones: 45,
@@ -17,8 +18,15 @@ const MOCK_STATS = {
 
 export default function DashboardPage() {
   const router = useRouter();
-  const user = getCurrentUser();
-  const userRole = user?.role || null;
+  const [mounted, setMounted] = useState(false);
+  
+  // Solo se ejecuta en el cliente
+  const userRole = typeof window !== 'undefined' ? getCurrentUser()?.role || null : null;
+
+  useEffect(() => {
+    // Marcar como montado después del primer render
+    requestAnimationFrame(() => setMounted(true));
+  }, []);
 
   const allStatsCards = [
     {
@@ -86,6 +94,27 @@ export default function DashboardPage() {
   const statsCards = userRole 
     ? allStatsCards.filter(card => card.roles.includes(userRole))
     : [];
+
+  if (!mounted) {
+    return (
+      <div className='space-y-6'>
+        <div 
+          className='rounded-3xl p-8 border border-white/20 shadow-2xl'
+          style={{ 
+            background: 'linear-gradient(135deg, #266df8 0%, #0049F3 50%, #003BBF 100%)',
+            backdropFilter: 'blur(20px)'
+          }}
+        >
+          <h1 className='text-4xl font-bold text-white mb-2'>
+            ¡Bienvenido al Dashboard! 🎉
+          </h1>
+          <p className='text-blue-100 text-lg'>
+            Cargando...
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className='space-y-6'>

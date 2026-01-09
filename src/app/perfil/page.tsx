@@ -45,14 +45,14 @@ export default function PerfilPage() {
         subtitle="Administra tu información personal" 
       />
       
-      <div className="mb-6 bg-gradient-to-r from-yellow-50 to-yellow-100 border-l-4 border-yellow-400 p-4 rounded-lg shadow-sm">
+      <div className="mb-6 bg-linear-to-r from-yellow-50 to-yellow-100 border-l-4 border-yellow-400 p-4 rounded-lg shadow-sm">
         <p className="text-yellow-800 font-medium">🚀 Modo Demo - Datos de ejemplo para demostración</p>
       </div>
       
       <div className="flex justify-end items-center mb-8">
         <GlassButton
           onClick={handleEdit}
-          className="bg-gradient-to-r from-[#266df8] to-[#0049F3]"
+          className="bg-linear-to-r from-[#266df8] to-[#0049F3]"
         >
           <Edit2 className="w-4 h-4 mr-2" />
           Editar Perfil
@@ -66,7 +66,7 @@ export default function PerfilPage() {
         <CardContent>
           <div className="grid md:grid-cols-2 gap-6">
             <div className="flex items-start space-x-3">
-              <div className="p-3 bg-gradient-to-br from-[#266df8]/20 to-[#0049F3]/20 rounded-lg">
+              <div className="p-3 bg-linear-to-br from-[#266df8]/20 to-[#0049F3]/20 rounded-lg">
                 <User className="w-6 h-6 text-[#266df8]" />
               </div>
               <div>
@@ -76,7 +76,7 @@ export default function PerfilPage() {
             </div>
             
             <div className="flex items-start space-x-3">
-              <div className="p-3 bg-gradient-to-br from-[#266df8]/20 to-[#0049F3]/20 rounded-lg">
+              <div className="p-3 bg-linear-to-br from-[#266df8]/20 to-[#0049F3]/20 rounded-lg">
                 <Mail className="w-6 h-6 text-[#266df8]" />
               </div>
               <div>
@@ -86,7 +86,7 @@ export default function PerfilPage() {
             </div>
             
             <div className="flex items-start space-x-3">
-              <div className="p-3 bg-gradient-to-br from-[#266df8]/20 to-[#0049F3]/20 rounded-lg">
+              <div className="p-3 bg-linear-to-br from-[#266df8]/20 to-[#0049F3]/20 rounded-lg">
                 <Phone className="w-6 h-6 text-[#266df8]" />
               </div>
               <div>
@@ -96,7 +96,7 @@ export default function PerfilPage() {
             </div>
             
             <div className="flex items-start space-x-3">
-              <div className="p-3 bg-gradient-to-br from-[#266df8]/20 to-[#0049F3]/20 rounded-lg">
+              <div className="p-3 bg-linear-to-br from-[#266df8]/20 to-[#0049F3]/20 rounded-lg">
                 <Shield className="w-6 h-6 text-[#266df8]" />
               </div>
               <div>
@@ -106,7 +106,7 @@ export default function PerfilPage() {
             </div>
 
             <div className="flex items-start space-x-3">
-              <div className="p-3 bg-gradient-to-br from-[#266df8]/20 to-[#0049F3]/20 rounded-lg">
+              <div className="p-3 bg-linear-to-br from-[#266df8]/20 to-[#0049F3]/20 rounded-lg">
                 <MapPin className="w-6 h-6 text-[#266df8]" />
               </div>
               <div>
@@ -116,7 +116,7 @@ export default function PerfilPage() {
             </div>
 
             <div className="flex items-start space-x-3">
-              <div className="p-3 bg-gradient-to-br from-[#266df8]/20 to-[#0049F3]/20 rounded-lg">
+              <div className="p-3 bg-linear-to-br from-[#266df8]/20 to-[#0049F3]/20 rounded-lg">
                 <Building className="w-6 h-6 text-[#266df8]" />
               </div>
               <div>
@@ -193,7 +193,7 @@ export default function PerfilPage() {
           <div className="flex gap-3 pt-4">
             <GlassButton
               onClick={handleSave}
-              className="flex-1 bg-gradient-to-r from-[#266df8] to-[#0049F3]"
+              className="flex-1 bg-linear-to-r from-[#266df8] to-[#0049F3]"
             >
               Guardar Cambios
             </GlassButton>
@@ -208,7 +208,7 @@ export default function PerfilPage() {
         </div>
       </GlassModal>
 
-      {toast && <Toast message={toast.message} type={toast.type} />}
+      {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
     </div>
   );
 }

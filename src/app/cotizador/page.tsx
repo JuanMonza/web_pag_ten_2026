@@ -60,11 +60,11 @@ export default function CotizadorPage() {
     return edad;
   };
 
-  const handleCotizanteChange = (id: string, field: string, value: string) => {
+  const handleCotizanteChange = (id: string, field: string, value: string | boolean) => {
     setCotizantes(cotizantes.map(c => {
       if (c.id === id) {
         const updated = { ...c, [field]: value };
-        if (field === 'fechaNacimiento') {
+        if (field === 'fechaNacimiento' && typeof value === 'string') {
           updated.edad = calcularEdad(value);
         }
         return updated;

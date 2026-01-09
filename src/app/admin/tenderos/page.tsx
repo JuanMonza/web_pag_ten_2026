@@ -130,14 +130,14 @@ export default function AdminTenderosPage() {
         subtitle="Administra los tenderos y sus comisiones" 
       />
       
-      <div className="mb-6 bg-gradient-to-r from-yellow-50 to-yellow-100 border-l-4 border-yellow-400 p-4 rounded-lg shadow-sm">
+      <div className="mb-6 bg-linear-to-r from-yellow-50 to-yellow-100 border-l-4 border-yellow-400 p-4 rounded-lg shadow-sm">
         <p className="text-yellow-800 font-medium">🚀 Modo Demo - Datos de ejemplo para demostración</p>
       </div>
       
       <div className="flex justify-end items-center mb-8">
         <GlassButton
           onClick={handleCreate}
-          className="bg-gradient-to-r from-[#266df8] to-[#0049F3]"
+          className="bg-linear-to-r from-[#266df8] to-[#0049F3]"
         >
           <UserPlus className="w-5 h-5 mr-2" />
           + Nuevo Tendero
@@ -152,7 +152,7 @@ export default function AdminTenderosPage() {
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>
-                <TableRow className="bg-gradient-to-r from-[#266df8]/10 to-[#0049F3]/10">
+                <TableRow className="bg-linear-to-r from-[#266df8]/10 to-[#0049F3]/10">
                   <TableHead className="font-bold text-gray-700">Nombre</TableHead>
                   <TableHead className="font-bold text-gray-700">Teléfono</TableHead>
                   <TableHead className="font-bold text-gray-700">Ciudad</TableHead>
@@ -168,7 +168,7 @@ export default function AdminTenderosPage() {
                     <TableCell className="text-gray-700">{tendero.telefono}</TableCell>
                     <TableCell className="text-gray-700">{tendero.ciudad}</TableCell>
                     <TableCell>
-                      <span className="px-3 py-1 bg-gradient-to-r from-[#266df8]/20 to-[#0049F3]/20 rounded-full text-sm font-bold text-[#0049F3]">
+                      <span className="px-3 py-1 bg-linear-to-r from-[#266df8]/20 to-[#0049F3]/20 rounded-full text-sm font-bold text-[#0049F3]">
                         {tendero.comision}%
                       </span>
                     </TableCell>
@@ -279,7 +279,7 @@ export default function AdminTenderosPage() {
           <div className="flex gap-3 pt-4">
             <GlassButton
               onClick={handleSave}
-              className="flex-1 bg-gradient-to-r from-[#266df8] to-[#0049F3]"
+              className="flex-1 bg-linear-to-r from-[#266df8] to-[#0049F3]"
               disabled={!formData.nombre || !formData.telefono || !formData.ciudad}
             >
               {currentTendero ? 'Guardar Cambios' : 'Crear Tendero'}
@@ -307,7 +307,7 @@ export default function AdminTenderosPage() {
           <div className="flex gap-3 pt-4">
             <GlassButton
               onClick={handleDeleteConfirm}
-              className="flex-1 bg-gradient-to-r from-red-500 to-red-600"
+              className="flex-1 bg-linear-to-r from-red-500 to-red-600"
             >
               Sí, Eliminar
             </GlassButton>

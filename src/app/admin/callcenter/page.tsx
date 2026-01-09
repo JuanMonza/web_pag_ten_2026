@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { GlassModal, GlassButton, Toast, GlassPagination } from '@/components/ui/GlassComponents';
-import { Plus, Edit2, Trash2, Mail, Phone } from 'lucide-react';
+import { Plus, Edit2, Trash2, Mail, Phone, Lightbulb } from 'lucide-react';
 
 interface CallCenter {
   id: string;
@@ -141,9 +141,10 @@ export default function CallCenterManagementPage() {
         subtitle="Administra los perfiles de los agentes de call center"
       />
 
-      <div className="mb-6 bg-gradient-to-r from-yellow-50 to-yellow-100 border-l-4 border-yellow-400 p-4 rounded-lg shadow-sm">
-        <p className="text-yellow-800 font-semibold">
-          💡 <strong>Modo Demo:</strong> Los cambios son temporales y se perderán al recargar la página.
+      <div className="mb-6 bg-linear-to-r from-yellow-50 to-yellow-100 border-l-4 border-yellow-400 p-4 rounded-lg shadow-sm">
+        <p className="text-yellow-800 font-semibold flex items-center gap-2">
+          <Lightbulb className="w-5 h-5" />
+          <strong>Modo Demo:</strong> Los cambios son temporales y se perderán al recargar la página.
         </p>
       </div>
 
